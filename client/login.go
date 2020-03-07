@@ -3,22 +3,11 @@ package main
 import (
 	"bytes"
 	"crypto/tls"
-	"crypto/x509"
 	"fmt"
-	"io/ioutil"
-	"log"
 	"net/http"
 )
 
 func logIn() {
-
-	// Create a CA certificate pool and add cert.pem to it
-	caCert, err := ioutil.ReadFile("cert.pem")
-	if err != nil {
-		log.Fatal(err)
-	}
-	caCertPool := x509.NewCertPool()
-	caCertPool.AppendCertsFromPEM(caCert)
 
 	// Create a HTTPS client and supply the created CA pool
 	client := &http.Client{

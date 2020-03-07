@@ -7,6 +7,8 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
+var index int = 0
+
 func requestHandler(ctx *fasthttp.RequestCtx) {
 	var creds Credentials
 
@@ -17,7 +19,10 @@ func requestHandler(ctx *fasthttp.RequestCtx) {
 		checkCreds(creds, ctx)
 	} else if tokenValidation(ctx) {
 		fmt.Println("token is valid")
-		getInterfaces(ctx)
+		index++
+		//getInterfaces(ctx)
+		sendData(ctx, index)
+		fmt.Println(index)
 	}
 
 }

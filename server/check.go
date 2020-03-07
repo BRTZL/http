@@ -14,6 +14,7 @@ func checkCreds(creds Credentials, ctx *fasthttp.RequestCtx) {
 	fmt.Println("works")
 	// Json parser
 	body := security(string(ctx.PostBody()), true)
+	//body := string(ctx.PostBody())
 	//fmt.Println(body)
 	err := json.NewDecoder(bytes.NewReader([]byte(body))).Decode(&creds)
 	// TODO: secure here

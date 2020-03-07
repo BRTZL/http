@@ -3,26 +3,15 @@ package main
 import (
 	"bytes"
 	"crypto/tls"
-	"crypto/x509"
 	"fmt"
-	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 )
 
 func makeRequest() (makeit bool) {
-
-	// Create a CA certificate pool and add cert.pem to it
-	caCert, err := ioutil.ReadFile("cert.pem")
-	if err != nil {
-		log.Fatal(err)
-	}
-	caCertPool := x509.NewCertPool()
-	caCertPool.AppendCertsFromPEM(caCert)
-
 	// Create a HTTPS client and supply the created CA pool
 	client := &http.Client{
+		// NOTE: https remove for ssl
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{
 				RootCAs: caCertPool,
@@ -39,12 +28,14 @@ func makeRequest() (makeit bool) {
 	fmt.Println("cookie      :", &http.Cookie{Name: "token", Value: token})
 
 	resp, err := client.Do(req)
+	body := resp.Body
+	resp.Body.Close()
+
 	check(err)
-	defer resp.Body.Close()
 
 	//fmt.Println("respond Headers:", resp.Header)
 	buf := new(bytes.Buffer)
-	buf.ReadFrom(resp.Body)
+	buf.ReadFrom(body)
 	newStr := buf.String()
 	// TODO: secure here
 	if newStr != "" {

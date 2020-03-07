@@ -20,6 +20,7 @@ func main() {
 	}()
 
 	if err := fasthttp.ListenAndServeTLS(":"+configs.Port, "cert.pem", "key.pem", secureHandler); err != nil {
+		// if err := fasthttp.ListenAndServe(":"+configs.Port, requestHandler); err != nil {
 		log.Fatalf("Error in ListenAndServe: %s", err)
 	}
 }

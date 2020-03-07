@@ -1,16 +1,19 @@
 package main
 
 import (
+	"crypto/x509"
 	"database/sql"
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"os"
 )
 
 var (
-	token  string
-	query  string
-	config Configs
+	token      string
+	query      string
+	config     Configs
+	caCertPool *x509.CertPool
 )
 
 // Configs : config settings from conf.json
@@ -37,4 +40,13 @@ func getConfig() {
 
 	// Unmarshal json file to struct
 	json.Unmarshal(byteValue, &config)
+
+	// Create a CA certificate pool and add cert.pem to it
+	caCert, err := ioutil.ReadFile("cert.pem")
+	if err != nil {
+		log.Fatal(err)
+	}
+	caCertPool = x509.NewCertPool()
+	caCertPool.AppendCertsFromPEM(caCert)
+
 }
